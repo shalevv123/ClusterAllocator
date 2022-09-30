@@ -60,10 +60,10 @@ public class AllocatorBalancingConstraintProvider implements ConstraintProvider 
                 unfilledMemoryTotal(constraintFactory),
                 //unfilledNetworkBandwidthTotal(constraintFactory),
                 emptyClustersTotal(constraintFactory),
-                migrationTotal(constraintFactory),
                 overfillCpuCoresTotal(constraintFactory),
                 overfillMemoryTotal(constraintFactory),
-                overfillNetworkBandwidthTotal(constraintFactory)
+                //overfillNetworkBandwidthTotal(constraintFactory),
+                migrationTotal(constraintFactory)
         };
     }
 
