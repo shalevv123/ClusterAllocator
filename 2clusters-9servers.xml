@@ -1,0 +1,74 @@
+<AllocatorBalance id="1">
+  <id>0</id>
+  <clusterList id="2">
+    <Cluster id="4">
+      <id>0</id>
+      <requiredCpuCores>6</requiredCpuCores>
+      <requiredMemory>4</requiredMemory>
+      <requiredNetworkBandwidth>6</requiredNetworkBandwidth>
+    </Cluster>
+    <Cluster id="5">
+      <id>1</id>
+      <requiredCpuCores>6</requiredCpuCores>
+      <requiredMemory>16</requiredMemory>
+      <requiredNetworkBandwidth>4</requiredNetworkBandwidth>
+    </Cluster>
+  </clusterList>
+  <serverList id="6">
+    <Server id="7">
+      <id>0</id>
+      <cpuCores>1</cpuCores>
+      <memory>1</memory>
+      <networkBandwidth>1</networkBandwidth>
+    </Server>
+    <Server id="8">
+      <id>1</id>
+      <cpuCores>1</cpuCores>
+      <memory>1</memory>
+      <networkBandwidth>1</networkBandwidth>
+    </Server>
+    <Server id="9">
+      <id>2</id>
+      <cpuCores>1</cpuCores>
+      <memory>8</memory>
+      <networkBandwidth>1</networkBandwidth>
+    </Server>
+    <Server id="10">
+      <id>3</id>
+      <cpuCores>1</cpuCores>
+      <memory>5</memory>
+      <networkBandwidth>1</networkBandwidth>
+    </Server>
+    <Server id="11">
+      <id>4</id>
+      <cpuCores>3</cpuCores>
+      <memory>1</memory>
+      <networkBandwidth>3</networkBandwidth>
+    </Server>
+    <Server id="12">
+      <id>5</id>
+      <cpuCores>1</cpuCores>
+      <memory>1</memory>
+      <networkBandwidth>3</networkBandwidth>
+    </Server>
+    <Server id="13">
+      <id>6</id>
+      <cpuCores>1</cpuCores>
+      <memory>6</memory>
+      <networkBandwidth>6</networkBandwidth>
+    </Server>
+    <Server id="14">
+      <id>7</id>
+      <cpuCores>1</cpuCores>
+      <memory>27</memory>
+      <networkBandwidth>1</networkBandwidth>
+	  <originalCluster>0</originalCluster>
+    </Server>
+    <Server id="15">
+      <id>8</id>
+      <cpuCores>5</cpuCores>
+      <memory>4</memory>
+      <networkBandwidth>4</networkBandwidth>
+    </Server>
+  </serverList>
+</AllocatorBalance>
