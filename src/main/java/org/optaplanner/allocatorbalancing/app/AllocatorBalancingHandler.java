@@ -39,11 +39,15 @@ public class AllocatorBalancingHandler {
         return runTimeData;
     }
 
+    public static void setRunTimeData(XYSeries runTimeData) {
+        AllocatorBalancingHandler.runTimeData = runTimeData;
+    }
+
     public void clearRunTimeData(){
         runTimeData = new XYSeries("Runtime Data");
     }
 
-    public static void Solver(String BalancePath, Integer runTime, Boolean detailedPrint, Boolean saveResult,
+    public static AllocatorBalance Solve(String BalancePath, Integer runTime, Boolean detailedPrint, Boolean saveResult,
                               String resultFileName, Boolean logResults)
             throws IOException, SAXException, ParserConfigurationException {
         // Build the Solver
@@ -78,6 +82,7 @@ public class AllocatorBalancingHandler {
         if (logResults) {
             runTimeData.add(runTime, Double.valueOf(-solvedAllocatorBalance.getScore().getSoftScore()));
         }
+        return solvedAllocatorBalance;
     }
     private static double getServerMedian(AllocatorBalance balance){
         List<Server> ServerList = balance.getServerList();
