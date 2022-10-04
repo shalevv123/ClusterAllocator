@@ -1,1 +1,1 @@
-﻿![Screenshot](/Pictures/ClusterAllocatorLogo.png)
+﻿![Screenshot](/pictures/ClusterAllocatorLogo.png)
