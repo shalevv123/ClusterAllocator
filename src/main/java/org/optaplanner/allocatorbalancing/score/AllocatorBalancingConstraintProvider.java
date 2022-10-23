@@ -13,7 +13,7 @@ import org.optaplanner.allocatorbalancing.domain.Cluster;
 import org.optaplanner.allocatorbalancing.domain.Server;
 
 public class AllocatorBalancingConstraintProvider implements ConstraintProvider {
-    //assuming CPU:RAM ratio is 4:1
+    //Assuming CPU:RAM "importance" ratio is 4:1
     private static int cpuWeight = 4;
     private static int memoryWeight = 1;
     private static int networkBandwidthWeight = 0;
@@ -71,6 +71,7 @@ public class AllocatorBalancingConstraintProvider implements ConstraintProvider 
     // Hard constraints
     // ************************************************************************
 
+    // Makes sure all the clusters CPU cores are filled.
     Constraint unfilledCpuCoresTotal(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(Server.class)
                 .groupBy(Server::getCluster, sum(Server::getCpuCores))
@@ -79,7 +80,7 @@ public class AllocatorBalancingConstraintProvider implements ConstraintProvider 
                         HardSoftScore.ONE_HARD,
                         (cluster, cpuCores) -> cluster.getRequiredCpuCores() - cpuCores);
     }
-
+    // Makes sure all the clusters memories are filled.
     Constraint unfilledMemoryTotal(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(Server.class)
                 .groupBy(Server::getCluster, sum(Server::getMemory))
@@ -88,7 +89,7 @@ public class AllocatorBalancingConstraintProvider implements ConstraintProvider 
                         HardSoftScore.ONE_HARD,
                         (cluster, memory) -> cluster.getRequiredMemory() - memory);
     }
-
+    // Makes sure all the clusters network usage is filled. this is an optional currently unused property of servers.
     Constraint unfilledNetworkBandwidthTotal(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(Server.class)
                 .groupBy(Server::getCluster, sum(Server::getNetworkBandwidth))
@@ -97,7 +98,7 @@ public class AllocatorBalancingConstraintProvider implements ConstraintProvider 
                         HardSoftScore.ONE_HARD,
                         (cluster, networkBandwidth) -> cluster.getRequiredNetworkBandwidth() - networkBandwidth);
     }
-
+    // Makes sure no clusters are left unallocated.
     Constraint emptyClustersTotal(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(Cluster.class)
                 .ifNotExists(Server.class, equal(Function.identity(), Server::getCluster))
@@ -106,9 +107,10 @@ public class AllocatorBalancingConstraintProvider implements ConstraintProvider 
                         cluster -> cluster.getRequiredCpuCores() + cluster.getRequiredMemory() + cluster.getRequiredNetworkBandwidth());
     }
     // ************************************************************************
-    // Migration constraints
+    // Migration constraint
     // ************************************************************************
 
+    // Gives a penalty for every server migration
     Constraint migrationTotal(ConstraintFactory constraintFactory){
         return constraintFactory.forEachIncludingNullVars(Server.class)
                 .filter(Server::isMoved)
@@ -119,6 +121,7 @@ public class AllocatorBalancingConstraintProvider implements ConstraintProvider 
     // Soft constraints
     // ************************************************************************
 
+    // Gives a penalty for overfilling CPU cores.
     Constraint overfillCpuCoresTotal(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(Server.class)
                 .groupBy(Server::getCluster, sum(Server::getCpuCores))
@@ -127,7 +130,7 @@ public class AllocatorBalancingConstraintProvider implements ConstraintProvider 
                         HardSoftScore.ONE_SOFT,
                         (cluster, cpuCores) -> (cpuCores - cluster.getRequiredCpuCores())*cpuWeight);
     }
-
+    // Gives a penalty for overfilling Memory.
     Constraint overfillMemoryTotal(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(Server.class)
                 .groupBy(Server::getCluster, sum(Server::getMemory))
@@ -136,7 +139,7 @@ public class AllocatorBalancingConstraintProvider implements ConstraintProvider 
                         HardSoftScore.ONE_SOFT,
                         (cluster, memory) -> (memory - cluster.getRequiredMemory())* memoryWeight);
     }
-
+    // Gives a penalty for overfilling Network usage.  this is an optional currently unused property of servers.
     Constraint overfillNetworkBandwidthTotal(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(Server.class)
                 .groupBy(Server::getCluster, sum(Server::getNetworkBandwidth))

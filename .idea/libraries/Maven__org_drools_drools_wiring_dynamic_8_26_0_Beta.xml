@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.drools:drools-wiring-dynamic:8.26.0.Beta">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/drools/drools-wiring-dynamic/8.26.0.Beta/drools-wiring-dynamic-8.26.0.Beta.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/drools/drools-wiring-dynamic/8.26.0.Beta/drools-wiring-dynamic-8.26.0.Beta-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/drools/drools-wiring-dynamic/8.26.0.Beta/drools-wiring-dynamic-8.26.0.Beta-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

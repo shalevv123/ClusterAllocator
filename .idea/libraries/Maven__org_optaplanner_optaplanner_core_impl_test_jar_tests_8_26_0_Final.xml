@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.optaplanner:optaplanner-core-impl:test-jar:tests:8.26.0.Final">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/optaplanner/optaplanner-core-impl/8.26.0.Final/optaplanner-core-impl-8.26.0.Final-tests.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/optaplanner/optaplanner-core-impl/8.26.0.Final/optaplanner-core-impl-8.26.0.Final-test-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/optaplanner/optaplanner-core-impl/8.26.0.Final/optaplanner-core-impl-8.26.0.Final-test-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

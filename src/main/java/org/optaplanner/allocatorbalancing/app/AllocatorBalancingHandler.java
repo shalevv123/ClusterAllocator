@@ -5,6 +5,7 @@ import java.util.*;
 
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jfree.data.xy.XYDataItem;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
 import org.optaplanner.core.config.solver.SolverConfig;
@@ -33,9 +34,11 @@ import org.jfree.ui.RefineryUtilities;
 import org.jfree.chart.ChartUtilities;
 
 public class AllocatorBalancingHandler {
+
+    //this variable holds the softscore and time of all the problems that ran with "logResults" set to true.
     private static XYSeries runTimeData = new XYSeries("Runtime Data");
 
-    public XYSeries getRunTimeData() {
+    public static XYSeries getRunTimeData() {
         return runTimeData;
     }
 
@@ -43,20 +46,43 @@ public class AllocatorBalancingHandler {
         AllocatorBalancingHandler.runTimeData = runTimeData;
     }
 
-    public void clearRunTimeData(){
-        runTimeData = new XYSeries("Runtime Data");
+    public static void addRunTimeData(int time, double score){
+        runTimeData.add(time, score);
     }
 
-    public static AllocatorBalance Solve(String BalancePath, Integer runTime, Boolean detailedPrint, Boolean saveResult,
+    public static void addRunTimeData(XYSeries series){
+        List<XYDataItem> items = new ArrayList<>(series.getItems());
+        for (XYDataItem item : items){
+            runTimeData.add(item);
+        }
+    }
+
+    public static void clearRunTimeData(){
+        runTimeData.clear();
+    }
+
+
+    public static AllocatorBalance Solve(AllocatorBalance unsolvedAllocatorBalance, Integer runTime, Boolean detailedPrint, Boolean saveResult,
                               String resultFileName, Boolean logResults)
             throws IOException, SAXException, ParserConfigurationException {
-        // Build the Solver
-        AllocatorBalance unsolvedAllocatorBalance = getBalance(BalancePath+".xml");
+        /*
+        :param unsolvedAllocatorBalance: An allocation state to be solved.
+        :param runTime: Runtime cap for the solver.
+        :param detailedPrint: True if you want a detailed print of the result.
+        :param saveResult: True if you want to save the results in an xml file.
+        :param resultFileName: if "saveResult" is True this is the name of the file.
+        :param logResults: True if you want to log the results into the runTimeData.
 
+        :return: A solved allocation state.
+         */
+        // Build the Solver
         double cpu_median = getServerMedian(unsolvedAllocatorBalance);
 
+        //setting the migration penalty. In development stages it was decided to be the max between:
+        //wasting 4 cpu cores or wasting half the median of the CPU cores of each server.
         AllocatorBalancingConstraintProvider.setMigration_penalty(Math.max(
-                4* AllocatorBalancingConstraintProvider.getCpuWeight(), cpu_median* AllocatorBalancingConstraintProvider.getCpuWeight()/2));
+                4* AllocatorBalancingConstraintProvider.getCpuWeight(),
+                cpu_median* AllocatorBalancingConstraintProvider.getCpuWeight()/2));
 
         SolverFactory<AllocatorBalance> solverFactory = SolverFactory.create(new SolverConfig()
                     .withSolutionClass(AllocatorBalance.class)
@@ -68,22 +94,31 @@ public class AllocatorBalancingHandler {
         AllocatorBalance solvedAllocatorBalance = solver.solve(unsolvedAllocatorBalance);
 
 
-            // Display the result //
+        // Display the result //
         System.out.println(
-                        "\nSolution ran for " + solvedAllocatorBalance + " seconds\n"
+                        "\nSolution ran for " + runTime + " seconds\n"
                         + "Score is: "+ solvedAllocatorBalance.getScore() + "\n");
         if (detailedPrint) {
             System.out.println(
                     "\nDetails: " + toDisplayString(solvedAllocatorBalance) + "\n");
         }
         if (saveResult) {
-            saveSolution(solvedAllocatorBalance, resultFileName+".xml");
+            saveSolution(solvedAllocatorBalance, resultFileName);
         }
-        if (logResults) {
-            runTimeData.add(runTime, Double.valueOf(-solvedAllocatorBalance.getScore().getSoftScore()));
+        if(solvedAllocatorBalance.getScore().getHardScore() == 0) {
+            if (logResults) {
+                runTimeData.add(runTime, Double.valueOf(-solvedAllocatorBalance.getScore().getSoftScore()));
+            }
+        }
+        else{
+            System.out.println("\n Logging this solution isn't valid.\n" +
+                                "Either Run it for a longer time, or a valid solution might not exist\n");
         }
         return solvedAllocatorBalance;
     }
+
+
+    // finds the median of the CPU cores among all servers.
     private static double getServerMedian(AllocatorBalance balance){
         List<Server> ServerList = balance.getServerList();
         List<Integer> cpuList = ServerList.stream().map(Server::getCpuCores).sorted().collect(Collectors.toList());
@@ -92,6 +127,7 @@ public class AllocatorBalancingHandler {
         else
             return (double) cpuList.get(cpuList.size()/2);
     }
+
 
     private static List<Cluster> getClusterlist(NodeList rawClusterList){
         List<Cluster> clusterList = new ArrayList<>();
@@ -108,6 +144,7 @@ public class AllocatorBalancingHandler {
         }
         return clusterList;
     }
+
 
     private static List<Server> getServerList(NodeList rawServerList, List<Cluster> clusterList){
         List<Server> ServerList = new ArrayList<>();
@@ -135,7 +172,14 @@ public class AllocatorBalancingHandler {
         }
         return ServerList;
     }
-    private static AllocatorBalance getBalance(String path) throws ParserConfigurationException, IOException, SAXException {
+
+
+    public static AllocatorBalance getBalance(String path) throws ParserConfigurationException, IOException, SAXException {
+        /*
+        :param path : A path to an xml file in the require format.
+
+        :return: An allocation state translation of the xml file.
+         */
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         File file = new File(path);
@@ -145,7 +189,10 @@ public class AllocatorBalancingHandler {
         List<Server> serverList =  getServerList(document.getElementsByTagName("Server"), clusterList);
         return new AllocatorBalance(0, clusterList, serverList);
     }
-    private static String toDisplayString(AllocatorBalance allocatorBalance) {
+
+
+    //displays the allocation state in a readable way.
+    public static String toDisplayString(AllocatorBalance allocatorBalance) {
         StringBuilder displayString = new StringBuilder();
         Map<Cluster,List<Server>> balanceList = new TreeMap<>();
         Cluster nullCluster = new Cluster(-1, 0, 0, 0);
@@ -190,6 +237,8 @@ public class AllocatorBalancingHandler {
         }
         return displayString.toString();
     }
+
+
     private static void writeComputerList(AllocatorBalance solution, FileWriter writer, AtomicInteger outerId) throws IOException {
         int innerId = 0;
         writer.write("\t<clusterList id=\""+outerId+"\">\n");
@@ -207,6 +256,7 @@ public class AllocatorBalancingHandler {
         }
         writer.write("\t</clusterList>\n");
     }
+
 
     private static void writeProcessList(AllocatorBalance solution, FileWriter writer, AtomicInteger outerId) throws IOException{
         int innerId = 0;
@@ -228,15 +278,24 @@ public class AllocatorBalancingHandler {
 
         writer.write("\t</serverList>\n");
     }
-    private static void saveSolution(AllocatorBalance solution, String filename){
+
+
+    public static void saveSolution(AllocatorBalance solution, String savePath){
+        /*
+        :param solution: An allocation state to save in an xml file.
+        :param savePath: The name of the file that will be created, if an absolute path isn't specified it will be
+        created in the cwd.
+
+        :return: Saves the allocation state as an xml file in the savePath.
+         */
         AtomicInteger outerId = new AtomicInteger(0);
         try{
-            File file = new File(filename);
+            File file = new File(savePath);
             if(!file.createNewFile()){
                 file.delete();
                 file.createNewFile();
             }
-            FileWriter writer = new FileWriter(filename);
+            FileWriter writer = new FileWriter(savePath);
             writer.write("<AllocatorBalance id=\""+outerId+"\">\n");
             outerId.set(outerId.get()+1);
             writer.write("\t<id>0</id>\n");
@@ -250,11 +309,19 @@ public class AllocatorBalancingHandler {
         }
     }
 
-    public static void graphResults(boolean saveGraph, String filename){
+
+    public static void graphResults(boolean saveGraph, String savePath){
+        /*
+        :param saveGraph: True if you want the image of the graph to be saved.
+        :param savePath: The name of the file that will be created, if an absolute path isn't specified it will be
+        created in the cwd.
+
+        :return: Displays the graph of score/runtime and saves it if specified
+         */
         class GraphResults extends ApplicationFrame {
             private final JFreeChart chart;
 
-            public GraphResults(final String title) {
+            private GraphResults(final String title) {
 
                 super(title);
                 final XYSeriesCollection data = new XYSeriesCollection(runTimeData);
@@ -283,7 +350,7 @@ public class AllocatorBalancingHandler {
         graph.setVisible(true);
         if (saveGraph) {
             try {
-                ChartUtilities.saveChartAsPNG(new File(filename + ".png"), graph.getChart(), 1000, 540);
+                ChartUtilities.saveChartAsPNG(new File(savePath), graph.getChart(), 1000, 540);
             } catch (Exception e) {
                 System.out.println("An error has occurred\n");
                 e.printStackTrace();
