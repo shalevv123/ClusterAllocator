@@ -16,46 +16,8 @@ Latest version of Apache Maven
 
   &emsp; The format of the xml file should be as follows:
 
-<AllocatorBalance id="0">
-
-`    `<id>0</id>
-
-`    `<clusterList id="1">
-
-`        `<Cluster id="2">
-
-`            `<id>0</id>
-
-`            `<requiredCpuCores>6</requiredCpuCores>
-
-`            `<requiredMemory>4</requiredMemory>
-
-`            `<requiredNetworkBandwidth>6</requiredNetworkBandwidth>
-
-`        `</Cluster>
-
-`    `</clusterList>
-
-`    `<serverList id="3">  
-
-`        `<Server id="4">
-
-`            `<id>7</id>
-
-`            `<cpuCores>1</cpuCores>
-
-`            `<memory>27</memory>
-
-`            `<networkBandwidth>1</networkBandwidth>
-
-`            `<originalCluster>0</originalCluster> **This is an optional field if the sever was already assigned**
-
-`        `</Server>
-
-`    `</serverList>
-
-</AllocatorBalance>
-
+﻿![Screenshot](/pictures/xmlExample.png)
+ 
  &emsp; Example: AllocatorBalancingHandler.getBalance("data/unsolved/2clusters-9servers.xml")
 
 
