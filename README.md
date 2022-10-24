@@ -76,7 +76,7 @@ Latest version of Apache Maven
 
 &emsp;  :return: A solved allocation state.
 
-&emsp;  Example: AllocatorBalancingHandler.Solve(AllocatorBalancingHandler.getBalance("data/unsolved/2clusters-9servers.xml"),  time, true, true, "data/solved/test.xml", true);
+&emsp;  Example: AllocatorBalancingHandler.Solve(balance, time, true, true, "data/solved/test.xml", true);
 
 
 
@@ -91,7 +91,8 @@ Latest version of Apache Maven
 
  &emsp; :param solution: An allocation state to save in an xml file.
 
- &emsp; :param savePath: The name of the file that will be created, if an absolute path isn't specified it will be created in the cwd.
+ &emsp; :param savePath: The name of the file that will be created, if an absolute path isn't specified it will be created
+ &emsp; in the cwd.
 
  &emsp; :sideEffect: Saves the allocation state as an xml file in the savePath.
 
@@ -137,7 +138,8 @@ Short explanation: An XYSeries is practically an array of two dimentional points
 
 &emsp;  :param saveGraph: True if you want the image of the graph to be saved.
 
-&emsp;  :param savePath: The name of the file that will be created, if an absolute path isn't specified it will be created in the cwd.
+&emsp;  :param savePath: The name of the file that will be created, if an absolute path isn't specified it will be created
+&emsp; in the cwd.
 
 &emsp;  :sideEffect: Displays the graph of score/runtime and saves it if specified.
 
