@@ -59,6 +59,7 @@ The format of the xml file should be as follows:
 Example: AllocatorBalancingHandler.getBalance("data/unsolved/2clusters-9servers.xml")
 
 
+
 **AllocatorBalance Solve(AllocatorBalance unsolvedAllocatorBalance, Integer runTime, Boolean detailedPrint, Boolean saveResult, String resultFileName, Boolean logResults)**
 
 :param unsolvedAllocatorBalance: An allocation state to be solved.
@@ -76,6 +77,7 @@ Example: AllocatorBalancingHandler.getBalance("data/unsolved/2clusters-9servers.
 :return: A solved allocation state.
 
 Example: AllocatorBalancingHandler.Solve(AllocatorBalancingHandler.getBalance("data/unsolved/2clusters-9servers.xml"), time, true, true, "data/solved/test.xml", true);
+
 
 
 **String toDisplayString(AllocatorBalance allocatorBalance)**
@@ -100,9 +102,11 @@ Example: AllocatorBalancingHandler.saveSolution(balance, "data/solved/solution")
 Short explanation: An XYSeries is practically an array of two dimentional points ( X, Y coordiantes) where X is time and Y is score.
 
 
+
 **XYSeries getRunTimeData()**
 
 :return: An XYSeries of the current logged solutions.
+
 
 
 **void setRunTimeData(XYSeries runTimeData)**
@@ -117,13 +121,16 @@ Short explanation: An XYSeries is practically an array of two dimentional points
 :param score:  The score of the solution.
 
 
+
 **void addRunTimeData(XYSeries series)**
 
 :param series: XYSeries to add to the current logger state.
 
 
+
 **void clearRunTimeData()**
 Clears the runtime logger.
+
 
 
 **void graphResults(boolean saveGraph, String savePath)**
