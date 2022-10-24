@@ -10,7 +10,7 @@ Latest version of Apache Maven
 
 **AllocatorBalance AllocatorBalancingHandler.getBalance(String path)**
 
-  :param path : A path to an xml file in the require format.
+  &emsp; :param path : A path to an xml file in the require format.
 
   :return: An allocation state translation of the xml file.
 
