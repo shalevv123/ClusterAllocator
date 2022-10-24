@@ -1,4 +1,6 @@
-﻿![Screenshot](/pictures/ClusterAllocatorLogo.png)
+
+![Screenshot](/pictures/ClusterAllocatorLogo.png)
+
 
 # User guide
 
