@@ -22,14 +22,14 @@ Requirements:
 >     <requiredMemory> <NUMBER> </requiredMemory>
 >     <requiredNetworkBandwidth> <NUMBER> </requiredNetworkBandwidth>
 >   </Cluster>
-> </clusterList>
-> <serverList id="4">
+>  </clusterList>
+>  <serverList id="4">
 >   <Server id="5">
-      <id> 0 </id>
-      <cpuCores> <NUMBER> </cpuCores>
-      <memory> <NUMBER> </memory>
-      <networkBandwidth> <NUMBER> </networkBandwidth>
-	  <originalCluster> <NUMBER> </originalCluster> **This is an optional field if a sever was already allocated**
-    </Server>
-  </serverList>
-</AllocatorBalance>
+>     <id> 0 </id>
+>     <cpuCores> <NUMBER> </cpuCores>
+>     <memory> <NUMBER> </memory>
+>     <networkBandwidth> <NUMBER> </networkBandwidth>
+>     <originalCluster> <NUMBER> </originalCluster> **This is an optional field if a sever was already allocated**
+>   </Server>
+>  </serverList>
+> </AllocatorBalance>
