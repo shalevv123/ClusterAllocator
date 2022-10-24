@@ -67,7 +67,7 @@ Latest version of Apache Maven
 
 
 
-Short explanation: An XYSeries is practically an array of two dimentional points ( X, Y coordiantes) where X is time and Y is score.
+**An XYSeries is practically an array of two dimentional points ( X, Y coordiantes) where X is time and Y is score.**
 
 
 
