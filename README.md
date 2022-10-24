@@ -28,9 +28,13 @@ Latest version of Apache Maven
 
 &emsp;  :param runTime: Runtime cap for the solver (in seconds) .
 
-&emsp;  :param detailedPrint: True if you want a detailed print of the result. (See toDisplayString for more information)
+&emsp;  :param detailedPrint: True if you want a detailed print of the result. 
 
-&emsp;  :param saveResult: True if you want to save the results in an xml file. (See saveSolution for more information)
+&emsp; (See toDisplayString for more information)
+
+&emsp;  :param saveResult: True if you want to save the results in an xml file.
+
+&emsp; (See saveSolution for more information)
 
 &emsp;  :param resultFileName: if "saveResult" is True this is the name of the file.
 
