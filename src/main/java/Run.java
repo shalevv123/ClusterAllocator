@@ -13,8 +13,8 @@ import java.util.List;
 import org.optaplanner.allocatorbalancing.app.*;
 public class Run {
     public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
-        for (int time = 2; time<5 ; time+=1) {
-            AllocatorBalancingHandler.Solve(AllocatorBalancingHandler.getBalance("./data/unsolved/2clusters-9servers.xml"), time,
+        for (int time = 5; time<=35 ; time+=10) {
+            AllocatorBalancingHandler.Solve(AllocatorBalancingHandler.getBalance("./data/unsolved/30clusters-200servers.xml"), time,
                     true, true, "./data/solved/test" + time +".xml", true);
         }
 
