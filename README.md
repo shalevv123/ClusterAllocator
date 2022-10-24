@@ -2,6 +2,7 @@
 
 # User Guide
 Requirements: 
+
   Latest version of Apache Maven
   
 **AllocatorBalancingHandler.getBalance(String path)**
@@ -11,7 +12,7 @@ Requirements:
 :return: An allocation state translation of the xml file.
 
 ## The format of the xml file should be as follows:
-
+> 
 <AllocatorBalance id="1">
   <id> 0 </id>
   <clusterList id="2">
